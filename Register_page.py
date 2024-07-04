@@ -19,9 +19,9 @@ def create_users_table():
 def add_user(first_name, last_name, national_id, password):
     conn = mysql.connector.connect(
         host="localhost",
-        user="your_username",
-        password="your_password",
-        database="your_database"
+        user="root",
+        password="Fushiguro@11",
+        database="users"
     )
     c = conn.cursor()
     c.execute('INSERT INTO users (first_name, last_name, national_id, password) VALUES (%s, %s, %s, %s)', (first_name, last_name, national_id, password))
