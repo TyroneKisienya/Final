@@ -4,29 +4,45 @@ import hashlib
 
 # Function to create users table if it doesn't exist
 def create_users_table():
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Fushiguro@11",
-        database="users"
-    )
-    c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS users(first_name TEXT, last_name TEXT, national_id int(10) PRIMARY KEY, password TEXT)')
-    conn.commit()
-    conn.close()
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="your_username",
+            password="your_password",
+            database="your_database"
+        )
+        c = conn.cursor()
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                first_name VARCHAR(255),
+                last_name VARCHAR(255),
+                national_id VARCHAR(255) PRIMARY KEY,
+                password VARCHAR(255)
+            )
+        ''')
+        conn.commit()
+        conn.close()
+    except mysql.connector.Error as e:
+        st.error(f"Error creating table: {e}")
 
 # Function to add a new user to the database
 def add_user(first_name, last_name, national_id, password):
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Fushiguro@11",
-        database="users"
-    )
-    c = conn.cursor()
-    c.execute('INSERT INTO users (first_name, last_name, national_id, password) VALUES (%s, %s, %s, %s)', (first_name, last_name, national_id, password))
-    conn.commit()
-    conn.close()
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="your_username",
+            password="your_password",
+            database="your_database"
+        )
+        c = conn.cursor()
+        c.execute('INSERT INTO users (first_name, last_name, national_id, password) VALUES (%s, %s, %s, %s)', 
+                  (first_name, last_name, national_id, password))
+        conn.commit()
+        conn.close()
+        return True
+    except mysql.connector.Error as e:
+        st.error(f"Error adding user: {e}")
+        return False
 
 # Function to hash a password
 def hash_password(password):
@@ -53,9 +69,9 @@ def registration_page():
             if check_fields(first_name, last_name, national_id, password, confirm_password):
                 if password == confirm_password:
                     hashed_password = hash_password(password)
-                    add_user(first_name, last_name, national_id, hashed_password)
-                    st.success("You have successfully registered.")
-                    st.balloons()
+                    if add_user(first_name, last_name, national_id, hashed_password):
+                        st.success("You have successfully registered.")
+                        st.balloons()
                 else:
                     st.warning("Passwords do not match.")
             else:
