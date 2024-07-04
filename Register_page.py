@@ -74,9 +74,13 @@ def registration_page():
                 user_id = insert_user(conn, reg_user)
                 if user_id != -1:
                     st.success("Registration successful! User ID: {}".format(user_id))
+                    st.info("Please go to the Login page to sign in.")
                 else:
                     st.error("Failed to register user.")
             else:
                 st.error("Lost connection to the database.")
         else:
             st.warning("Please fill out all fields.")
+
+if __name__ == "__main__":
+    registration_page()

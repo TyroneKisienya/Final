@@ -40,12 +40,13 @@ def login_page():
         if conn is not None:
             if validate_user(conn, login_email, login_password):
                 st.success("Login successful!")
-                st.query_params["email"] = login_email
-                st.rerun()
+                return login_email
             else:
                 st.error("Invalid email or password.")
         else:
             st.error("Failed to connect to database.")
+    
+    return None
 
 if __name__ == "__main__":
     login_page()

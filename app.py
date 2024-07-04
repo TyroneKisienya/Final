@@ -4,13 +4,15 @@ from User_page import user_page
 from Register_page import registration_page
 
 def main():
-    query_params = st.query_params
-    email = query_params.get("email", [None])[0]
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Go to", ["Login", "Register"])
 
-    if email:
-        user_page(email)
-    else:
-        login_page()
+    if page == "Login":
+        email = login_page()
+        if email:
+            user_page(email)
+    elif page == "Register":
+        registration_page()
 
 if __name__ == "__main__":
     main()
