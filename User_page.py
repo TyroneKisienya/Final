@@ -41,3 +41,8 @@ def user_page(email):
             st.error("User not found.")
     else:
         st.error("Failed to connect to database.")
+
+    if st.button("Logout"):
+        st.session_state.logged_in = False
+        st.session_state.user_email = None
+        st.rerun()

@@ -4,15 +4,24 @@ from User_page import user_page
 from Register_page import registration_page
 
 def main():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to", ["Login", "Register"])
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+        st.session_state.user_email = None
 
-    if page == "Login":
-        email = login_page()
-        if email:
-            user_page(email)
-    elif page == "Register":
-        registration_page()
+    if not st.session_state.logged_in:
+        st.sidebar.title("Navigation")
+        page = st.sidebar.radio("Go to", ["Login", "Register"])
+
+        if page == "Login":
+            email = login_page()
+            if email:
+                st.session_state.logged_in = True
+                st.session_state.user_email = email
+                st.rerun()
+        elif page == "Register":
+            registration_page()
+    else:
+        user_page(st.session_state.user_email)
 
 if __name__ == "__main__":
     main()
