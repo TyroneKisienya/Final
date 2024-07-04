@@ -11,7 +11,7 @@ def create_users_table():
         database="users"
     )
     c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS users(first_name TEXT, last_name TEXT, national_id TEXT PRIMARY KEY, password TEXT)')
+    c.execute('CREATE TABLE IF NOT EXISTS users(first_name TEXT, last_name TEXT, national_id int(10) PRIMARY KEY, password TEXT)')
     conn.commit()
     conn.close()
 
