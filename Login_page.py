@@ -16,35 +16,36 @@ def create_connection():
         print(e)
     return conn
 
-def login_user(conn, email, password):
+def validate_user(conn, email, password):
+    sql_query = "SELECT email FROM users WHERE email = %s AND password = %s"
     try:
-        cursor = conn.cursor(buffered=True)
-        cursor.execute('SELECT password FROM users WHERE email = %s', (email,))
-        data = cursor.fetchone()
-        if data and password == data[0]:
-            return True
-        else:
-            return False
+        cursor = conn.cursor()
+        cursor.execute(sql_query, (email, password))
+        result = cursor.fetchone()
+        return result is not None
     except mysql.connector.Error as e:
-        print(e)
+        print(f"Error: {e}")
         return False
 
 def login_page():
-    st.title("Login")
-
-    conn = create_connection()
-    if conn is None:
-        st.error("Failed to connect to database.")
-        return
+    st.title("Login Page")
 
     with st.form("login_form"):
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
+        login_email = st.text_input("Email")
+        login_password = st.text_input("Password", type="password")
         login_submitted = st.form_submit_button("Login")
 
     if login_submitted:
-        if login_user(conn, email, password):
-            st.success("Logged in successfully.")
-            st.session_state['login_status'] = True
+        conn = create_connection()
+        if conn is not None:
+            if validate_user(conn, login_email, login_password):
+                st.success("Login successful!")
+                st.query_params["email"] = login_email
+                st.rerun()
+            else:
+                st.error("Invalid email or password.")
         else:
-            st.warning("User does not exist or password is incorrect.")
+            st.error("Failed to connect to database.")
+
+if __name__ == "__main__":
+    login_page()
