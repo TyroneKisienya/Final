@@ -1,8 +1,6 @@
 import streamlit as st
 import mysql.connector
 
-st.set_page_config(layout="wide")
-
 def create_connection():
     conn = None
     try:
@@ -30,6 +28,7 @@ def get_user_details(conn, email):
         return None
 
 def user_page(email):
+    st.set_page_config(layout="wide")
     # Custom CSS for positioning
     st.markdown("""
     <style>
@@ -39,6 +38,9 @@ def user_page(email):
         right: 20px;
         z-index: 1000;
         text-align: right;
+    }
+    .user {
+        font-size: 20;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -67,8 +69,12 @@ def user_page(email):
                 st.markdown('</div>', unsafe_allow_html=True)
 
             # Main content
-            st.title("User Dashboard")
-            st.write("Welcome to your dashboard!")
+            st.markdown(f"""
+            <div class="user">
+                <p><strong>Welcome {first_name}</strong></p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.columns(8)[-8].text_input("Search Medicine")
 
             st.page_link("https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location", label="Find Chemists", icon="🌎")
             # Add more dashboard content here
