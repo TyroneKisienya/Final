@@ -6,9 +6,9 @@ import hashlib
 def create_users_table():
     conn = mysql.connector.connect(
         host="localhost",
-        user="your_username",
-        password="your_password",
-        database="your_database"
+        user="root",
+        password="Fushiguro@11",
+        database="users"
     )
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS users(first_name TEXT, last_name TEXT, national_id TEXT PRIMARY KEY, password TEXT)')
