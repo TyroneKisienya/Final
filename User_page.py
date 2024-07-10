@@ -1,5 +1,7 @@
 import streamlit as st
 import mysql.connector
+import joblib
+from drug_recommender import recommend_drugs
 
 def create_connection():
     conn = None
@@ -71,6 +73,20 @@ def user_page(email):
                 <p><strong>Welcome {first_name}</strong></p>
             </div>
             """, unsafe_allow_html=True)
+
+             # Drug Recommendation Section
+            st.subheader("Drug Recommendation")
+            user_input = st.text_area("Describe your condition or symptoms:")
+            if st.button("Get Recommendations"):
+                if user_input:
+                    recommendations = recommend_drugs(user_input)
+                    st.write("Recommended drugs based on your description:")
+                    for reason, drugs in recommendations:
+                        st.write(f"**Reason:** {reason}")
+                        st.write(f"**Recommended drugs:** {', '.join(drugs[:5])}")
+                        st.write("---")
+                else:
+                    st.warning("Please enter a description of your condition.")
 
             st.page_link("https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location", label="Find Chemists", icon="🌎")
             # Add more dashboard content here
