@@ -1,8 +1,8 @@
 import csv
 import mysql.connector
 
-# CSV file path - update this to the correct path
-csv_file = 'C:\\Users\\pc\\Desktop\\Data\\drugproducts1q_2024Updated05082024.csv'  # Replace with your actual file path
+# CSV access
+csv_file = 'C:\\Users\\pc\\Desktop\\Data\\drugproducts1q_2024Updated05082024.csv'
 
 # MySQL connection details
 db_config = {
@@ -12,11 +12,10 @@ db_config = {
     'database': 'medication'
 }
 
-# Table and column names in MySQL
 table_name = 'drugs'
 column_name = 'drug_name'
 
-# Read data from CSV
+# data from CSV
 data_to_insert = []
 with open(csv_file, 'r') as file:
     csv_reader = csv.reader(file)
@@ -29,11 +28,9 @@ with open(csv_file, 'r') as file:
             if drug_name:  # Only add non-empty names
                 data_to_insert.append(drug_name)
 
-# Connect to MySQL
 conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
-# Create table if not exists
 create_table_sql = f"""
 CREATE TABLE IF NOT EXISTS {table_name} (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,14 +39,11 @@ CREATE TABLE IF NOT EXISTS {table_name} (
 """
 cursor.execute(create_table_sql)
 
-# Prepare SQL query for insertion
 insert_sql = f"INSERT INTO {table_name} ({column_name}) VALUES (%s)"
 
-# Execute insert for each value
 for value in data_to_insert:
     cursor.execute(insert_sql, (value,))
 
-# Commit changes and close connection
 conn.commit()
 cursor.close()
 conn.close()

@@ -1,29 +1,28 @@
-# drug_recommender.py
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 import pickle
 
-# Load and preprocess data
+# preprocess data
 df = pd.read_csv('output1.csv')
 df['Description'] = df['Description'].fillna('')
 df['combined_text'] = df['Drug_Name'] + ' ' + df['Reason'] + ' ' + df['Description']
 
-# Encode the target variable
+# Encoding
 le = LabelEncoder()
 df['Reason_encoded'] = le.fit_transform(df['Reason'])
 
-# Create TF-IDF vectors
+# vectors
 tfidf = TfidfVectorizer(max_features=1000, stop_words='english')
 X = tfidf.fit_transform(df['combined_text'])
 y = df['Reason_encoded']
 
-# Train the RandomForestClassifier
+# RandomForestClassifier
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_classifier.fit(X, y)
 
-# Save the model and other necessary objects
+# Save the model outputs
 with open('rf_classifier.pkl', 'wb') as f:
     pickle.dump(rf_classifier, f)
 
@@ -34,7 +33,7 @@ with open('label_encoder.pkl', 'wb') as f:
     pickle.dump(le, f)
 
 def recommend_drugs(description, top_n=3):
-    # Load the saved objects
+    # objects
     with open('rf_classifier.pkl', 'rb') as f:
         rf_classifier = pickle.load(f)
     
@@ -55,13 +54,3 @@ def recommend_drugs(description, top_n=3):
         recommendations.append((reason, drugs))
     
     return recommendations
-
-# If you want to test the function
-#if __name__ == "__main__":
- #   description = "I have severe acne with blackheads and whiteheads"
-  #  recommendations = recommend_drugs(description)
-  #  print("\nRecommended drugs based on the description:")
-   # for reason, drugs in recommendations:
-    #    print(f"Reason: {reason}")
-    #    print(f"Recommended drugs: {', '.join(drugs[:5])}")
-     #   print()

@@ -1,1 +1,1 @@
-App to select medicine reponding to the fungi evolution
+App to select medicine responding to the fungi evolution

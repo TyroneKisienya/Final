@@ -31,7 +31,9 @@ def get_user_details(conn, email):
 
 def user_page(email):
     st.set_page_config(layout="wide")
+
     # Custom CSS for positioning
+    
     st.markdown("""
     <style>
     .user-info {
@@ -74,7 +76,7 @@ def user_page(email):
             </div>
             """, unsafe_allow_html=True)
 
-             # Drug Recommendation Section
+             # recommendation Section
             st.subheader("Drug Recommendation")
             user_input = st.text_area("Describe your condition or symptoms:")
             if st.button("Get Recommendations"):
@@ -89,7 +91,7 @@ def user_page(email):
                     st.warning("Please enter a description of your condition.")
 
             st.page_link("https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location", label="Find Chemists", icon="🌎")
-            # Add more dashboard content here
+            # dashboard content here
         else:
             st.error("User not found.")
     else:
