@@ -1,6 +1,7 @@
 import streamlit as st
 import mysql.connector
-import joblib
+import requests
+from twilio.rest import Client
 from drug_recommender import recommend_drugs
 
 def create_connection():
@@ -28,6 +29,59 @@ def get_user_details(conn, email):
     except mysql.connector.Error as e:
         print(f"Error: {e}")
         return None
+    
+def get_user_location():
+    try:
+        response = requests.get('https://ipapi.co/json/', timeout=5)
+        data = response.json()
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        if latitude and longitude:
+            return latitude, longitude
+        else:
+            return None
+    except:
+        return None
+
+def get_emergency_contact(conn, email):
+    sql_query = "SELECT emergency_name, emergency_phone FROM users WHERE email = %s"
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql_query, (email,))
+        result = cursor.fetchone()
+        return result
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+        return None
+
+def send_emergency_whatsapp(to_phone, user_name, latitude, longitude):
+    account_sid =''
+    auth_token = ''
+    from_phone = ''  # Your Twilio WhatsApp number
+
+    client = Client(account_sid, auth_token)
+
+    try:
+        # Send text message
+        text_message = f"Emergency Alert! {user_name} needs assistance."
+        client.messages.create(
+            body=text_message,
+            from_=from_phone,
+            to=f"whatsapp:{to_phone}"
+        )
+
+        # Send location message
+        location_message = client.messages.create(
+            from_=from_phone,
+            to=f"whatsapp:{to_phone}",
+            body=f"{user_name}'s Location",
+            persistent_action=[f"geo:{latitude},{longitude}|{user_name}'s Location"]
+        )
+
+        return True
+    except Exception as e:
+        print(f"Error sending WhatsApp message: {e}")
+        return False
 
 def user_page(email):
     st.set_page_config(layout="wide")
@@ -89,6 +143,29 @@ def user_page(email):
                         st.write("---")
                 else:
                     st.warning("Please enter a description of your condition.")
+            
+            if st.button("Send Emergency WhatsApp"):
+                conn = create_connection()
+                if conn is not None:
+                    emergency_contact = get_emergency_contact(conn, email)
+                    if emergency_contact:
+                        emergency_name, emergency_whatsapp = emergency_contact
+                        location = get_user_location()
+                        user_details = get_user_details(conn, email)
+                        user_name = f"{user_details[0]} {user_details[1]}"
+
+                        if location:
+                            latitude, longitude = location
+                            if send_emergency_whatsapp(emergency_whatsapp, user_name, latitude, longitude):
+                                st.success("Emergency WhatsApp message with location sent successfully!")
+                            else:
+                                st.error("Failed to send emergency WhatsApp message.")
+                        else:
+                            st.error("Unable to retrieve location. Emergency message sent without location.")
+                    else:
+                        st.error("Emergency contact information not found.")
+                else:
+                    st.error("Failed to connect to database.")
 
             st.page_link("https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location", label="Find Chemists", icon="🌎")
             # dashboard content here

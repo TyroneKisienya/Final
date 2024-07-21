@@ -24,7 +24,10 @@ def create_user_table(conn):
             last_name VARCHAR(255) NOT NULL,
             phone_number VARCHAR(20) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL
+            password VARCHAR(255) NOT NULL,
+            emergency_name VARCHAR(255),
+            emergency_phone VARCHAR(20),
+            emergency_email VARCHAR(255)
         )
     """
     try:
@@ -36,8 +39,8 @@ def create_user_table(conn):
 
 def insert_user(conn, user):
     sql_insert_user = """
-        INSERT INTO users (first_name, last_name, phone_number, email, password)
-        VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO users (first_name, last_name, phone_number, email, password, emergency_name, emergency_phone, emergency_email)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     try:
         cursor = conn.cursor()
@@ -65,11 +68,14 @@ def registration_page():
         reg_phone_number = st.text_input("Phone Number")
         reg_email = st.text_input("Email")
         reg_password = st.text_input("Password", type="password")
+        reg_emergency_name = st.text_input("Emergency Contact Name")
+        reg_emergency_phone = st.text_input("Emergency Contact Phone Number")
+        reg_emergency_email = st.text_input("Emergency Contact Email")
         reg_submitted = st.form_submit_button("Register")
 
     if reg_submitted:
-        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password:
-            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password)
+        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email :
+            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email )
             if conn.is_connected():
                 user_id = insert_user(conn, reg_user)
                 if user_id != -1:
