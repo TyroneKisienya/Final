@@ -54,10 +54,12 @@ def get_emergency_contact(conn, email):
         print(f"Error: {e}")
         return None
 
+# Twillio credentials
+
 def send_emergency_whatsapp(to_phone, user_name, latitude, longitude):
     account_sid =''
     auth_token = ''
-    from_phone = ''  # Your Twilio WhatsApp number
+    from_phone = ''  
 
     client = Client(account_sid, auth_token)
 
@@ -86,7 +88,7 @@ def send_emergency_whatsapp(to_phone, user_name, latitude, longitude):
 def user_page(email):
     st.set_page_config(layout="wide")
 
-    # Custom CSS for positioning
+    # CSS for positioning
     
     st.markdown("""
     <style>
@@ -123,7 +125,7 @@ def user_page(email):
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
 
-            # Main content
+            # Main Dashboard content
             st.markdown(f"""
             <div class="user">
                 <p><strong>Welcome {first_name}</strong></p>
@@ -168,7 +170,6 @@ def user_page(email):
                     st.error("Failed to connect to database.")
 
             st.page_link("https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location", label="Find Chemists", icon="🌎")
-            # dashboard content here
         else:
             st.error("User not found.")
     else:
