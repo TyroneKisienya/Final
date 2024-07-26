@@ -9,13 +9,14 @@ def main():
     user_input = st.text_area("Describe your condition or symptoms:")
     if st.button("Get Recommendations"):
         if user_input:
-            recommendations = recommend_drugs(user_input, top_n=1)  # Get only top recommendation
+            recommendations = recommend_drugs(user_input)  # Get only top recommendation
             st.write("Recommended drugs based on your description:")
             for reason, drugs in recommendations:
                 st.write(f"**Reason:** {reason}")
                 st.write("**Recommended drugs:**")
                 for drug in drugs[:5]:  # Limit to top 5 drugs
                     st.write(f"- {drug}")
+                st.write("---")
         else:
             st.warning("Please enter a description of your condition.")
     
