@@ -141,7 +141,9 @@ def user_page(email):
                     st.write("Recommended drugs based on your description:")
                     for reason, drugs in recommendations:
                         st.write(f"**Reason:** {reason}")
-                        st.write(f"**Recommended drugs:** {', '.join(drugs[:5])}")
+                        st.write(f"**Recommended drugs:**")
+                        for drug in drugs[:5]:  # Limit to top 5 drugs
+                            st.write(f"- {drug}")
                         st.write("---")
                 else:
                     st.warning("Please enter a description of your condition.")
