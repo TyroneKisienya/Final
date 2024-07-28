@@ -5,10 +5,10 @@ def create_connection():
     conn = None
     try:
         conn = mysql.connector.connect(
-            host=st.secrets["connections.mysql"]["host"],
-            user=st.secrets["connections.mysql"]["username"],
-            password=st.secrets["connections.mysql"]["password"],
-            database=st.secrets["connections.mysql"]["database"]
+            host="localhost",
+            user="root",
+            password="Fushiguro@11",
+            database="users"
         )
         if conn.is_connected():
             print("Connected to MySQL database")
@@ -74,8 +74,8 @@ def registration_page():
         reg_submitted = st.form_submit_button("Register")
 
     if reg_submitted:
-        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email:
-            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email)
+        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email :
+            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email )
             if conn.is_connected():
                 user_id = insert_user(conn, reg_user)
                 if user_id != -1:
