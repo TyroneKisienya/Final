@@ -1,6 +1,24 @@
 import streamlit as st
 import mysql.connector
 
+def create_database():
+    conn = None
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Fushiguro@11"
+        )
+        if conn.is_connected():
+            cursor = conn.cursor()
+            cursor.execute("CREATE DATABASE IF NOT EXISTS users")
+            print("Database created or already exists")
+    except mysql.connector.Error as e:
+        print(e)
+    finally:
+        if conn is not None and conn.is_connected():
+            conn.close()
+
 def create_connection():
     conn = None
     try:
@@ -54,6 +72,13 @@ def insert_user(conn, user):
 
 def registration_page():
     st.title("User Registration")
+
+    create_database()  # Create the database first
+    conn = create_connection()
+    if conn is not None:
+        create_user_table(conn)
+    else:
+        st.error("Failed to connect to database.")
 
     conn = create_connection()
     if conn is not None:
