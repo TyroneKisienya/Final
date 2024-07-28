@@ -1,32 +1,14 @@
 import streamlit as st
 import mysql.connector
 
-def create_database():
-    conn = None
-    try:
-        conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="Fushiguro@11"
-        )
-        if conn.is_connected():
-            cursor = conn.cursor()
-            cursor.execute("CREATE DATABASE IF NOT EXISTS users")
-            print("Database created or already exists")
-    except mysql.connector.Error as e:
-        print(e)
-    finally:
-        if conn is not None and conn.is_connected():
-            conn.close()
-
 def create_connection():
     conn = None
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="Fushiguro@11",
-            database="users"
+            host=st.secrets["connections.mysql"]["host"],
+            user=st.secrets["connections.mysql"]["username"],
+            password=st.secrets["connections.mysql"]["password"],
+            database=st.secrets["connections.mysql"]["database"]
         )
         if conn.is_connected():
             print("Connected to MySQL database")
@@ -73,13 +55,6 @@ def insert_user(conn, user):
 def registration_page():
     st.title("User Registration")
 
-    create_database()  # Create the database first
-    conn = create_connection()
-    if conn is not None:
-        create_user_table(conn)
-    else:
-        st.error("Failed to connect to database.")
-
     conn = create_connection()
     if conn is not None:
         create_user_table(conn)
@@ -99,8 +74,8 @@ def registration_page():
         reg_submitted = st.form_submit_button("Register")
 
     if reg_submitted:
-        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email :
-            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email )
+        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email:
+            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email)
             if conn.is_connected():
                 user_id = insert_user(conn, reg_user)
                 if user_id != -1:
