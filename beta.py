@@ -42,7 +42,7 @@ def main():
             recommendations = recommend_drugs(user_input)
             st.write("Recommended drugs based on your description:")
             recommendation_text = ""
-            for i, (reason, drugs) in enumerate(recommendations[:2]):  # Limit to top 2 recommendations
+            for i, (reason, drugs) in enumerate(recommendations[:5]):  # Limit to top 2 recommendations
                 st.write(f"**Reason:** {reason}")
                 st.write("**Recommended drugs:**")
                 recommendation_text += f"Reason: {reason}\nRecommended drugs:\n"
