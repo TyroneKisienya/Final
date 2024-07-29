@@ -42,7 +42,7 @@ def main():
             recommendations = recommend_drugs(user_input)
             st.write("Recommended drugs based on your description:")
             recommendation_text = ""
-            for i, (reason, drugs) in enumerate(recommendations[:5]):  # Limit to top 2 recommendations
+            for i, (reason, drugs) in enumerate(recommendations[:5]):  # Limit to top 5 recommendations
                 st.write(f"**Reason:** {reason}")
                 st.write("**Recommended drugs:**")
                 recommendation_text += f"Reason: {reason}\nRecommended drugs:\n"
@@ -51,7 +51,7 @@ def main():
                     recommendation_text += f"- {drug}\n"
                 st.write("---")
                 recommendation_text += "---\n"
-                if i == 1:  # Break after 2 recommendations
+                if i == 5:  # Break after 2 recommendations
                     break
 
             # Store recommendations in session state
