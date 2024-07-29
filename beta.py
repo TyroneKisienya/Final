@@ -51,7 +51,7 @@ def main():
                     recommendation_text += f"- {drug}\n"
                 st.write("---")
                 recommendation_text += "---\n"
-                if i == 5:  # Break after 2 recommendations
+                if i == 1:  # Break after 2 recommendations
                     break
 
             # Store recommendations in session state
