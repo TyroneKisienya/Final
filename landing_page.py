@@ -31,3 +31,18 @@ def landing_page(change_page):
         """,
         unsafe_allow_html=True,
     )
+    st.markdown("---")
+    st.markdown("---")
+    st.markdown("### About")
+    st.markdown("""
+    # Safespace
+    Safespace is tailored for you. You have any verified medical symptoms or a reason or even a medical practitioner's recommendation,
+        register your details and feed the model with the said information and get the best suggested medical drugs to use for treatment.
+                Recommendations should be treated as suggestions and not as professional medical advice.
+    """)
+
+    st.markdown("### Get Help")
+    st.markdown("User Manual'https://github.com/TyroneKisienya/Final/blob/main/Project%20Documentation%204.pdf'")
+
+    st.markdown("### Report a Bug")
+    st.markdown("Contact Me 'tyronekisienya01@gmail.com'")

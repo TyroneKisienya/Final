@@ -85,8 +85,7 @@ def send_emergency_whatsapp(to_phone, user_name, latitude, longitude):
         print(f"Error sending WhatsApp message: {e}")
         return False
 
-def user_page(email):
-    st.set_page_config(layout="wide")
+def user_page(email, change_page):
 
     # CSS for positioning
     

@@ -5,16 +5,9 @@ from User_page import user_page
 from Register_page import registration_page
 
 def main():
-    st.set_page_config(page_title="Safespace", page_icon="🏠", menu_items={
-        'Get Help': 'https://www.your-help-url.com',
-        'Report a bug': 'mailto:tyronekisienya01@gmail.com',
-        'About': """
-        # Safespace
-        Safespace is tailored for you. You have any verified medical symptoms or a reason or even a medical practitioner's recommendation,
-        register your details and feed the model with the said information and get the best suggested medical drugs to use for treatment.
-        Recommendations should be treated as suggestions and not as professional medical advice.
-        """
-    })
+    st.set_page_config(page_title="Safespace", page_icon="🏠")
+
+    #st.set_page_config(page_title="Safespace", page_icon="🏠")
 
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
