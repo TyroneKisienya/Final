@@ -52,7 +52,7 @@ def insert_user(conn, user):
         print(f"Error: {e}")
         return -1
 
-def registration_page():
+def registration_page(change_page):
     st.title("User Registration")
 
     conn = create_connection()
@@ -74,8 +74,8 @@ def registration_page():
         reg_submitted = st.form_submit_button("Register")
 
     if reg_submitted:
-        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email :
-            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email )
+        if reg_first_name and reg_last_name and reg_phone_number and reg_email and reg_password and reg_emergency_name and reg_emergency_phone and reg_emergency_email:
+            reg_user = (reg_first_name, reg_last_name, reg_phone_number, reg_email, reg_password, reg_emergency_name, reg_emergency_phone, reg_emergency_email)
             if conn.is_connected():
                 user_id = insert_user(conn, reg_user)
                 if user_id != -1:
@@ -87,6 +87,9 @@ def registration_page():
                 st.error("Lost connection to the database.")
         else:
             st.warning("Please fill out all fields.")
+
+    if st.button("Back to Home"):
+        change_page("landing")
 
 if __name__ == "__main__":
     registration_page()

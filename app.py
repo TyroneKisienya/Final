@@ -1,27 +1,58 @@
 import streamlit as st
+from landing_page import landing_page
 from Login_page import login_page
 from User_page import user_page
 from Register_page import registration_page
 
 def main():
+    st.set_page_config(page_title="Safespace", page_icon="🏠", menu_items={
+        'Get Help': 'https://www.your-help-url.com',
+        'Report a bug': 'mailto:tyronekisienya01@gmail.com',
+        'About': """
+        # Safespace
+        Safespace is tailored for you. You have any verified medical symptoms or a reason or even a medical practitioner's recommendation,
+        register your details and feed the model with the said information and get the best suggested medical drugs to use for treatment.
+        Recommendations should be treated as suggestions and not as professional medical advice.
+        """
+    })
+
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
         st.session_state.user_email = None
 
-    if not st.session_state.logged_in:
-        st.sidebar.title("Navigation")
-        page = st.sidebar.radio("Go to", ["Login", "Register"])
+    if "page" not in st.session_state:
+        st.session_state.page = "landing"
 
-        if page == "Login":
-            email = login_page()
+    # Function to change pages
+    def change_page(new_page):
+        st.session_state.page = new_page
+        st.experimental_rerun()
+
+    # Sidebar navigation (only show for non-landing pages)
+    if st.session_state.page != "landing":
+        with st.sidebar:
+            st.title("Navigation")
+            if st.button("Home"):
+                change_page("landing")
+            if st.button("Login"):
+                change_page("login")
+            if st.button("Register"):
+                change_page("register")
+
+    # Main content
+    if not st.session_state.logged_in:
+        if st.session_state.page == "landing":
+            landing_page(change_page)
+        elif st.session_state.page == "register":
+            registration_page(change_page)
+        elif st.session_state.page == "login":
+            email = login_page(change_page)
             if email:
                 st.session_state.logged_in = True
                 st.session_state.user_email = email
-                st.rerun()
-        elif page == "Register":
-            registration_page()
+                st.experimental_rerun()
     else:
-        user_page(st.session_state.user_email)
+        user_page(st.session_state.user_email, change_page)
 
 if __name__ == "__main__":
     main()

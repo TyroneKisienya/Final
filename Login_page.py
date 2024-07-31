@@ -27,7 +27,7 @@ def validate_user(conn, email, password):
         print(f"Error: {e}")
         return False
 
-def login_page():
+def login_page(change_page):
     st.title("Login Page")
 
     with st.form("login_form"):
@@ -45,6 +45,9 @@ def login_page():
                 st.error("Invalid email or password.")
         else:
             st.error("Failed to connect to database.")
+
+    if st.button("Back to Home"):
+        change_page("landing")
     
     return None
 
