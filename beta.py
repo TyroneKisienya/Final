@@ -28,12 +28,6 @@ def send_sms(to_phone, message):
 def main():
     st.set_page_config(layout="wide")
 
-    # Phone number input
-    phone_number = st.text_input("Enter your phone number (format: +254XXXXXXXXX):")
-    
-    if phone_number and not is_valid_phone_number(phone_number):
-        st.warning("Please enter a valid phone number in the format +254XXXXXXXXX")
-
     # Recommendation Section
     st.subheader("Drug Recommendation")
     user_input = st.text_area("Describe your condition or symptoms:")
@@ -59,23 +53,5 @@ def main():
         else:
             st.warning("Please enter a description of your condition.")
     
-    # Page link to find chemists
-    chemist_link = "https://www.google.com/maps/search/?api=1&query=nearest+chemists+to+my+current+location"
-    st.page_link(chemist_link, label="Find Chemists", icon="🌎")
-
-    # Button to send SMS
-    if st.button("Send Recommendations via SMS"):
-        if phone_number and is_valid_phone_number(phone_number):
-            if 'recommendation_text' in st.session_state:
-                message = f"{st.session_state.recommendation_text}\nFind nearest chemists: {chemist_link}"
-                if send_sms(phone_number, message):
-                    st.success("Recommendations sent to your phone!")
-                else:
-                    st.error("Failed to send SMS. Please try again.")
-            else:
-                st.warning("Please get recommendations first before sending SMS.")
-        else:
-            st.warning("Please enter a valid phone number to receive recommendations.")
-
 if __name__ == "__main__":
     main()
