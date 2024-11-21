@@ -1,29 +1,5 @@
 import streamlit as st
 from drug_recommender import recommend_drugs
-from twilio.rest import Client
-import re
-
-def is_valid_phone_number(number):
-    pattern = r'^\+254\d{9}$'
-    return re.match(pattern, number) is not None
-
-def send_sms(to_phone, message):
-    account_sid = st.secrets["twilio_account_sid"]
-    auth_token = st.secrets["twilio_auth_token"]
-    from_phone = st.secrets["twilio_phone_number"]
-
-    client = Client(account_sid, auth_token)
-
-    try:
-        message = client.messages.create(
-            body=message,
-            from_=from_phone,
-            to=to_phone
-        )
-        return True
-    except Exception as e:
-        st.error(f"Error sending SMS: {e}")
-        return False
 
 def main():
     st.set_page_config(layout="wide")
