@@ -29,7 +29,7 @@ with open('rf_classifier.pkl', 'wb') as f:
 with open('tfidf_vectorizer.pkl', 'wb') as f:
     pickle.dump(tfidf, f)
 
-with open('label_encoder.pkl', 'wb') as f:
+with open('label_encoder.pkl', 'wb') as f:  
     pickle.dump(le, f)
 
 def recommend_drugs(description, top_n=3):
